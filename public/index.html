@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Home Assistant One-Off Scheduling</title>
+    <link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+    <div class="container">
+        <header role="banner">
+            <h1>🏠 Home Assistant Scheduler</h1>
+            <div id="connectionStatus" class="status-badge">Checking...</div>
+        </header>
+
+        <div class="content">
+            <!-- Entity Selection Section -->
+            <section class="card">
+                <h2>Select Entity</h2>
+                <div class="filter-group">
+                    <input type="text" id="searchFilter" placeholder="Search entities...">
+                    <select id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="light">Lights</option>
+                        <option value="switch">Switches</option>
+                        <option value="climate">Climate</option>
+                        <option value="lock">Locks</option>
+                        <option value="cover">Covers</option>
+                        <option value="fan">Fans</option>
+                    </select>
+                </div>
+                <div id="entityList" class="entity-list">
+                    <div class="loading">Loading entities...</div>
+                </div>
+            </section>
+
+            <!-- Schedule Action Section -->
+            <section class="card" id="scheduleSection" style="display: none;">
+                <h2>Schedule Action</h2>
+                <div id="selectedEntityInfo" class="entity-info"></div>
+                
+                <div class="form-group">
+                    <label>Action</label>
+                    <select id="actionSelect">
+                        <option value="">Select an action...</option>
+                    </select>
+                </div>
+
+                <div id="actionParameters" class="form-group" style="display: none;">
+                    <label>Parameters</label>
+                    <div id="parameterInputs"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Schedule Type</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="scheduleType" value="relative" checked>
+                            Relative (in X minutes)
+                        </label>
+                        <label>
+                            <input type="radio" name="scheduleType" value="absolute">
+                            Absolute (at specific time)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="relativeSchedule">
+                    <label>Minutes from now</label>
+                    <input type="number" id="relativeMinutes" min="1" value="20" placeholder="e.g., 20">
+                </div>
+
+                <div class="form-group" id="absoluteSchedule" style="display: none;">
+                    <label>Date and Time</label>
+                    <input type="datetime-local" id="absoluteTime">
+                </div>
+
+                <button id="scheduleBtn" class="btn-primary">Schedule Action</button>
+            </section>
+
+            <!-- Scheduled Jobs Section -->
+            <section class="card">
+                <h2>Scheduled Actions</h2>
+                <div id="scheduledList" class="scheduled-list">
+                    <div class="empty-state">No scheduled actions yet</div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="app.js?v=3"></script>
+</body>
+</html>

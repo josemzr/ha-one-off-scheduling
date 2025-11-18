@@ -1,0 +1,19 @@
+name: "One-Off Scheduling"
+version: "1.0.0"
+slug: "ha-one-off-scheduling"
+description: "Schedule one-off automations in Home Assistant with a responsive web UI"
+url: "https://github.com/jmm-org1/ha-one-off-scheduling"
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+init: false
+ingress: true
+ingress_port: 3000
+panel_icon: mdi:calendar-clock
+startup: application
+boot: auto
+options: {}
+schema: {}
