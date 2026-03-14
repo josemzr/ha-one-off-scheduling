@@ -1,0 +1,36 @@
+services:
+  # Node.js scheduling server (existing functionality)
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - HA_URL=${HA_URL:-http://homeassistant.local:8123}
+      - HA_TOKEN=${HA_TOKEN}
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - ha-scheduling
+
+  # Python MCP Server
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    ports:
+      - "8000:8000"
+    environment:
+      - HA_URL=${HA_URL:-http://homeassistant.local:8123}
+      - HA_TOKEN=${HA_TOKEN}
+      - NODE_SERVER_URL=http://web:3000
+    depends_on:
+      - web
+    restart: unless-stopped
+    networks:
+      - ha-scheduling
+
+networks:
+  ha-scheduling:
+    driver: bridge

@@ -170,6 +170,67 @@ The application consists of:
 - Verify the server is running continuously
 - Ensure system time is correct
 
+## MCP Server
+
+This project now includes a **Model Context Protocol (MCP)** server implementation, providing a standardized interface for AI assistants and other MCP clients to interact with the Home Assistant scheduling system.
+
+### What is MCP?
+
+The Model Context Protocol allows AI assistants like Claude to directly interact with external systems through a standardized interface. The MCP server exposes tools for managing entities and scheduling automations.
+
+### Running with MCP Server
+
+**Using Docker Compose (Recommended):**
+```bash
+docker-compose up
+```
+This runs both the web interface (port 3000) and MCP server (port 8000).
+
+**Using Combined Docker Image:**
+```bash
+docker build -f Dockerfile.combined -t ha-scheduling-combined .
+docker run -p 3000:3000 -p 8000:8000 \
+  -e HA_URL=http://your-ha-ip:8123 \
+  -e HA_TOKEN=your_token \
+  ha-scheduling-combined
+```
+
+**Standalone MCP Server:**
+```bash
+pip install -r requirements.txt
+python mcp_server.py
+```
+
+### Available MCP Tools
+
+The MCP server provides these tools:
+- **Entity Management**: `get_entities`, `get_entity_state`, `get_available_services`
+- **Scheduling**: `schedule_action`, `get_scheduled_jobs`, `cancel_scheduled_job`
+- **Direct Control**: `turn_on_entity`, `turn_off_entity`, `set_climate_temperature`, `set_cover_position`
+- **System**: `health_check`
+
+For detailed documentation, see [MCP_README.md](MCP_README.md).
+
+### Using with Claude Desktop
+
+Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+
+```json
+{
+  "mcpServers": {
+    "ha-scheduling": {
+      "command": "python",
+      "args": ["/path/to/ha-one-off-scheduling/mcp_server.py"],
+      "env": {
+        "HA_URL": "http://your-ha-ip:8123",
+        "HA_TOKEN": "your_token",
+        "NODE_SERVER_URL": "http://localhost:3000"
+      }
+    }
+  }
+}
+```
+
 ## License
 
 ISC

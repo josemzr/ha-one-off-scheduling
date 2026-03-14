@@ -1,0 +1,43 @@
+FROM python:3.11-slim
+
+# Install Node.js and npm
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    npm \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files for Node.js
+COPY package*.json ./
+
+# Install Node.js dependencies
+RUN npm ci --only=production
+
+# Copy Node.js application files
+COPY server.js ./
+COPY mock-server.js ./
+COPY public ./public/
+
+# Copy Python requirements
+COPY requirements.txt ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy MCP server
+COPY mcp_server.py ./
+
+# Make scripts executable
+RUN chmod +x mcp_server.py
+
+# Copy supervisor configuration
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Expose ports
+EXPOSE 3000 8000
+
+# Run supervisor to manage both services
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
