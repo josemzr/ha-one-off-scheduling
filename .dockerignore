@@ -1,0 +1,14 @@
+node_modules/
+.venv/
+.git/
+.gitignore
+.env
+.env.example
+*.md
+!CHANGELOG.md
+.DS_Store
+npm-debug.log
+*.log
+test_*.py
+example_*.py
+__pycache__/
