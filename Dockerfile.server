@@ -1,0 +1,26 @@
+FROM node:22-alpine
+
+# Install build tools needed by better-sqlite3
+RUN apk add --no-cache python3 make g++
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Remove build tools to reduce image size
+RUN apk del python3 make g++
+
+COPY server.js mcp-server.js rest-api.js db.js ./
+COPY public ./public/
+
+# Create data directory for SQLite database
+RUN mkdir -p /data && chown node:node /data
+
+EXPOSE 3000
+
+USER node
+
+ENV DB_PATH=/data/scheduler.db
+
+CMD ["node", "server.js"]

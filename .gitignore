@@ -1,0 +1,23 @@
+node_modules/
+.env
+.DS_Store
+npm-debug.log
+*.log
+
+# SQLite database files
+*.db
+*.db-wal
+*.db-shm
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
